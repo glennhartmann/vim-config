@@ -180,3 +180,12 @@ function! NOEOL()
 	set binary
 endfunction
 command! NoEOL call NOEOL()
+
+" local tags files
+if isdirectory('./.undobak')
+    let g:easytags_file = './.undobak/easytags'
+else
+    let g:easytags_file = '~/.vimtags'
+endif
+
+set tags=~/.vimtags,~/vimtags,./tags,./.tags,./.undobak/tags,./.undobak/.tags,./.undobak/easytags
