@@ -1,6 +1,6 @@
 " Vim script
 " Author: Peter Odding <peter@peterodding.com>
-" Last Change: August 11, 2010
+" Last Change: February 24, 2011
 " URL: http://peterodding.com/code/vim/easytags/
 
 let s:script = expand('<sfile>:p:~')
@@ -14,7 +14,7 @@ function! easytags#autoload() " {{{2
     if pathname != ''
       let tags_outdated = getftime(pathname) > getftime(easytags#get_tagsfile())
       if tags_outdated || !easytags#file_has_tags(pathname)
-        call easytags#update(1, 0)
+        call easytags#update(1, 0, [])
       endif
     endif
     " Apply highlighting of tags in global tags file to current buffer?
@@ -36,13 +36,14 @@ function! easytags#autoload() " {{{2
   endtry
 endfunction
 
-function! easytags#update(silent, filter_tags, ...) " {{{2
+function! easytags#update(silent, filter_tags, filenames) " {{{2
   try
+    let s:cached_filenames = {}
     let starttime = xolox#timer#start()
-    let cfile = s:check_cfile(a:silent, a:filter_tags, a:0 > 0)
+    let cfile = s:check_cfile(a:silent, a:filter_tags, !empty(a:filenames))
     let tagsfile = easytags#get_tagsfile()
     let firstrun = !filereadable(tagsfile)
-    let cmdline = s:prep_cmdline(cfile, tagsfile, firstrun, a:000)
+    let cmdline = s:prep_cmdline(cfile, tagsfile, firstrun, a:filenames)
     let output = s:run_ctags(starttime, cfile, tagsfile, firstrun, cmdline)
     if !firstrun
       let num_filtered = s:filter_merge_tags(a:filter_tags, tagsfile, output)
@@ -60,6 +61,8 @@ function! easytags#update(silent, filter_tags, ...) " {{{2
     return 1
   catch
     call xolox#warning("%s: %s (at %s)", s:script, v:exception, v:throwpoint)
+  finally
+    unlet s:cached_filenames
   endtry
 endfunction
 
@@ -114,11 +117,17 @@ function! s:prep_cmdline(cfile, tagsfile, firstrun, arguments) " {{{3
     endif
     let have_args = 1
   else
-    for fname in a:arguments
-      let matches = split(expand(fname), "\n")
-      if !empty(matches)
-        call extend(cmdline, map(matches, 'shellescape(v:val)'))
+    for arg in a:arguments
+      if arg =~ '^-'
+        call add(cmdline, arg)
         let have_args = 1
+      else
+        let matches = split(expand(arg), "\n")
+        if !empty(matches)
+          call map(matches, 'shellescape(s:canonicalize(v:val))')
+          call extend(cmdline, matches)
+          let have_args = 1
+        endif
       endif
     endfor
   endif
@@ -156,7 +165,6 @@ function! s:filter_merge_tags(filter_tags, tagsfile, output) " {{{3
   let [headers, entries] = easytags#read_tagsfile(a:tagsfile)
   call s:set_tagged_files(entries)
   let filters = []
-  let s:cached_filenames = {}
   let tagged_files = s:find_tagged_files(a:output)
   if !empty(tagged_files)
     call add(filters, '!has_key(tagged_files, s:canonicalize(get(v:val, 1)))')
@@ -168,7 +176,6 @@ function! s:filter_merge_tags(filter_tags, tagsfile, output) " {{{3
   if !empty(filters)
     call filter(entries, join(filters, ' && '))
   endif
-  unlet s:cached_filenames
   let num_filtered = num_old_entries - len(entries)
   call map(entries, 'join(v:val, "\t")')
   call extend(entries, a:output)
@@ -199,12 +206,14 @@ endfunction
 
 function! easytags#highlight() " {{{2
   try
+    " Treat C++ and Objective-C as plain C.
     let filetype = get(s:canonical_aliases, &ft, &ft)
     let tagkinds = get(s:tagkinds, filetype, [])
     if exists('g:syntax_on') && !empty(tagkinds) && !exists('b:easytags_nohl')
       let starttime = xolox#timer#start()
-      if !has_key(s:aliases, &ft)
-        let taglist = filter(taglist('.'), "get(v:val, 'language', '') ==? &ft")
+      if !has_key(s:aliases, filetype)
+        let ctags_filetype = easytags#to_ctags_ft(filetype)
+        let taglist = filter(taglist('.'), "get(v:val, 'language', '') ==? ctags_filetype")
       else
         let aliases = s:aliases[&ft]
         let taglist = filter(taglist('.'), "has_key(aliases, tolower(get(v:val, 'language', '')))")
@@ -220,7 +229,7 @@ function! easytags#highlight() " {{{2
         if matches != []
           call map(matches, 'xolox#escape#pattern(get(v:val, "name"))')
           let pattern = tagkind.pattern_prefix . '\%(' . join(xolox#unique(matches), '\|') . '\)' . tagkind.pattern_suffix
-          let template = 'syntax match %s /%s/ containedin=ALLBUT,.*String.*,.*Comment.*'
+          let template = 'syntax match %s /%s/ containedin=ALLBUT,.*String.*,.*Comment.*,cIncluded'
           let command = printf(template, hlgroup_tagged, escape(pattern, '/'))
           try
             execute command
@@ -513,7 +522,8 @@ endif
 call easytags#define_tagkind({
       \ 'filetype': 'php',
       \ 'hlgroup': 'phpFunctions',
-      \ 'filter': 'get(v:val, "kind") ==# "f"'})
+      \ 'filter': 'get(v:val, "kind") ==# "f"',
+      \ 'pattern_suffix': '(\@='})
 
 call easytags#define_tagkind({
       \ 'filetype': 'php',
@@ -569,7 +579,13 @@ call easytags#define_tagkind({
       \ 'filter': 'get(v:val, "kind") ==# "m"',
       \ 'pattern_prefix': '\.\@<='})
 
+call easytags#define_tagkind({
+      \ 'filetype': 'python',
+      \ 'hlgroup': 'pythonClass',
+      \ 'filter': 'get(v:val, "kind") ==# "c"'})
+
 highlight def link pythonMethodTag pythonFunction
+highlight def link pythonClassTag pythonFunction
 
 " Java. {{{2
 
@@ -585,6 +601,26 @@ call easytags#define_tagkind({
 
 highlight def link javaClass Identifier
 highlight def link javaMethod Function
+
+" C#. {{{2
+
+" TODO C# name spaces?
+" TODO C# interface names
+" TODO C# enumeration member names
+" TODO C# structure names?
+
+call easytags#define_tagkind({
+      \ 'filetype': 'cs',
+      \ 'hlgroup': 'csClassOrStruct',
+      \ 'filter': 'get(v:val, "kind") ==# "c"'})
+
+call easytags#define_tagkind({
+      \ 'filetype': 'cs',
+      \ 'hlgroup': 'csMethod',
+      \ 'filter': 'get(v:val, "kind") =~# "[ms]"'})
+
+highlight def link csClass Identifier
+highlight def link csMethod Function
 
 " }}}
 

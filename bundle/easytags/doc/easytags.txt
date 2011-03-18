@@ -66,10 +66,12 @@ tags file defined by |g:easytags_file|. When no arguments are given the tags for
 the current file are updated, otherwise the arguments are passed on to
 'ctags'. For example when you execute the Vim command ':UpdateTags -R ~/.vim'
 (or ':UpdateTags -R ~\vimfiles' on Windows) the plug-in will execute 'ctags -R
-~/.vim' for you (with some additional arguments).
+~/.vim' for you (with some additional arguments, see the troubleshooting
+section ":HighlightTags only works for the tags file created by |:UpdateTags|"
+for more information).
 
-When you execute this command like ':UpdateTags!' (including the bang!) then
-all tags whose files are missing will be filtered from the global tags file.
+When you execute this command like |:UpdateTags|! (including the bang!) then all
+tags whose files are missing will be filtered from the global tags file.
 
 Note that this command will be executed automatically every once in a while,
 assuming you haven't changed |g:easytags_on_cursorhold|.
@@ -208,6 +210,25 @@ run UNIX and use symbolic links) execute the following Vim command:
 Troubleshooting ~
 
 ------------------------------------------------------------------------------
+:HighlightTags only works for the tags file created by :UpdateTags ~
+
+If you want to create tags files and have their tags highlighted by the
+'easytags.vim' plug-in then you'll have to create the tags file with certain
+arguments to Exuberant Ctags:
+>
+    $ ctags --fields=+l --c-kinds=+p --c++-kinds=+p ...
+
+The '--fields=+l' argument makes sure that Exuberant Ctags includes a
+'language:...' property with each entry in the tags file. This is required by
+the |:HighlightTags| command so it can filter tags by their file type. The other
+two arguments make sure Exuberant Ctags generates tags for function prototypes
+in C/C++ source code.
+
+If you have the |g:easytags_include_members| option enabled (its off by default)
+then you'll also need to add the '--extra=+q' argument so that Exuberant Ctags
+generates tags for structure/class members.
+
+------------------------------------------------------------------------------
 The plug-in complains that Exuberant Ctags isn't installed ~
 
 After a Mac OS X user found out the hard way that the 'ctags' executable isn't
@@ -279,19 +300,26 @@ named '.tags' in the directory of the current file. Because of the ';' Vim
 also recurses upwards so that you can nest files arbitrarily deep under your
 project directories.
 
+------------------------------------------------------------------------------
+The plug-in doesn't seem to work in [Cygwin](http://en.wikipedia.org/wiki/Cygwin) ~
+
+If you want to use the plug-in with Vim under Cygwin, you need to have the
+Cygwin version of Ctags installed instead of the Windows version (thanks to
+Alex Zuroff for reporting this!).
+
 ==============================================================================
 Contact ~
 
 If you have questions, bug reports, suggestions, etc. the author can be
 contacted at peter@peterodding.com. The latest version is available at
 http://peterodding.com/code/vim/easytags/ and http://github.com/xolox/vim-easytags.
-If you like this plug-in please vote for it on www.vim.org [12].
+If you like this plug-in please vote for it on Vim Online [12].
 
 ==============================================================================
 License ~
 
 This software is licensed under the MIT license [13].
-© 2010 Peter Odding <peter@peterodding.com>.
+Copyright 2010 Peter Odding <peter@peterodding.com>.
 
 ==============================================================================
 References ~
