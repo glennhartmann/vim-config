@@ -96,7 +96,8 @@ set incsearch   " incremental searching
 set infercase   " more clever case search stuff
 
 set backspace=indent,eol,start " not really sure
-map ,v :e ~/.vimrc<cr>             " map shortcut to open vimrc
+" map shortcut to open vimrc
+map ,v :e ~/.vimrc<cr>
 
 " Status line
 set ls=2
@@ -207,3 +208,19 @@ function! <SID>StripTrailingWhitespace()
     call cursor(l, c)
 endfunction
 nmap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
+
+" map tab and shift-tab to go to next and previous function, respectively
+nnoremap <silent> <Tab> ]]
+nnoremap <silent> <S-Tab> [[
+
+set lazydraw " stop screen flickering during macro and function execution
+
+set virtualedit+=block " allow selecing after line end in visual block mode
+
+" show quickfix window for current search with <leader>g:
+nnoremap <silent> <leader>g :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+
+" easier quickfix navigation
+nnoremap Q :copen<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
