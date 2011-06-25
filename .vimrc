@@ -213,10 +213,6 @@ nmap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
 nnoremap <silent> <Tab> ]]
 nnoremap <silent> <S-Tab> [[
 
-if has("gui_running")
-    set lazydraw " stop screen flickering during macro and function execution
-endif
-
 set virtualedit+=block " allow selecing after line end in visual block mode
 
 " show quickfix window for current search with <leader>g:
