@@ -110,7 +110,7 @@ endfunction " }}}1
 " Repeated calls with the same arguments are ignored.
 function! pathogen#runtime_append_all_bundles(...) " {{{1
   let sep = pathogen#separator()
-  let name = a:0 ? a:1 : 'bundle'
+  let name = a:0 ? a:1 : 'pbundle'
   if "\n".s:done_bundles =~# "\\M\n".name."\n"
     return ""
   endif
