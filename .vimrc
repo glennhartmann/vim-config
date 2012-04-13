@@ -245,3 +245,8 @@ nnoremap ,nll /\%81v.\+/<CR>
 
 " jk escape
 inoremap jk <Esc>
+
+" treat lolcode files as lolcode files
+au BufRead,BufNewFile *.lol set filetype=lolcode
+au BufRead,BufNewFile *.lolcode set filetype=lolcode
+au BufRead,BufNewFile *.lols set filetype=lolcode
