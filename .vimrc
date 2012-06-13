@@ -21,36 +21,36 @@ call pathogen#runtime_append_all_bundles()
 
 " autoindent thing (meant to be used with autoclose v1.2 with line 88 commented out)
 inoremap {<CR> {<CR>}<Esc>O
-nmap \) i(<Esc>hx
-nmap \( i(<Esc>x
-map \_ xi(<Esc>[p
-nmap \] i[<Esc>hx
-nmap \[ i[<Esc>x
-map \- xi[<Esc>[p
-nmap \} i{<Esc>hx
-nmap \{ i{<Esc>x
-map \0 xi{<Esc>[p
-map \" xi"<Esc>[p
-"map \' xi'<Esc>[p
-imap ,) (<Esc>hxa
-imap ,} {<Esc>hxa
-imap ,] [<Esc>hxa
+nnoremap \) i(<Esc>hx
+nnoremap \( i(<Esc>x
+noremap \_ xi(<Esc>[p
+nnoremap \] i[<Esc>hx
+nnoremap \[ i[<Esc>x
+noremap \- xi[<Esc>[p
+nnoremap \} i{<Esc>hx
+nnoremap \{ i{<Esc>x
+noremap \0 xi{<Esc>[p
+noremap \" xi"<Esc>[p
+"noremap \' xi'<Esc>[p
+inoremap ,) (<Esc>hxa
+inoremap ,} {<Esc>hxa
+inoremap ,] [<Esc>hxa
 
 " remap arrow keys to buffer stuff - arrows will switch between windows, shift+arrow keys switch between buffers/tabs
-map <up> :wincmd k<CR>
-map <down> :wincmd j<CR>
-map \j :wincmd j<CR>
-map <right> :wincmd l<CR>
-map <left> :wincmd h<CR>
-map <S-right> :bnext<CR>
-map <S-left> :bprevious<CR>
-map <S-down> :tabprevious<CR>
-map <S-up> :tabnext<CR>
+noremap <up> :wincmd k<CR>
+noremap <down> :wincmd j<CR>
+noremap \j :wincmd j<CR>
+noremap <right> :wincmd l<CR>
+noremap <left> :wincmd h<CR>
+noremap <S-right> :bnext<CR>
+noremap <S-left> :bprevious<CR>
+noremap <S-down> :tabprevious<CR>
+noremap <S-up> :tabnext<CR>
 " Alt (option) + arrow keys = toggle minibufexplorer and nerdtree
-map <M-up> :CMiniBufExplorer<CR>
-map <M-down> :MiniBufExplorer<CR>
-map <M-left> :NERDTreeClose<CR>
-map <M-right> :NERDTree<CR>
+noremap <M-up> :CMiniBufExplorer<CR>
+noremap <M-down> :MiniBufExplorer<CR>
+noremap <M-left> :NERDTreeClose<CR>
+noremap <M-right> :NERDTree<CR>
 
 " Backups
 set backup " keep a backup file
@@ -68,8 +68,8 @@ set scrolloff=3     " Always keep three lines above or below the cursor
 set nocompatible    " Keep vim from trying to be 100% vi compatible
 
 " Use j and k to move down and up _logical_ lines instead of line-break lines
-nmap j gj
-nmap k gk
+nnoremap j gj
+nnoremap k gk
 
 " Enable filetype plugin
 filetype plugin on
@@ -99,7 +99,7 @@ set infercase   " more clever case search stuff
 
 set backspace=indent,eol,start " not really sure
 " map shortcut to open vimrc
-map ,v :e ~/.vimrc<cr>
+noremap ,v :e ~/.vimrc<cr>
 
 " Status line
 set ls=2
@@ -110,11 +110,11 @@ set grepprg=grep\ =nH\ $* " show file and line number apparently
 let g:tex_flavor='latex'
 
 " bind noh to C-h
-map <C-h> :noh<CR>
+noremap <C-h> :noh<CR>
 
 " set up spellcheck
 set spl=en_ca
-map \ss :set spell!<CR>
+noremap \ss :set spell!<CR>
 
 " exhuberant ctags
 command! Ctags Gentags
@@ -135,13 +135,13 @@ command! Qa qa
 command! Reconf :so ~/.vimrc
 
 " \ma opens makefile in current directory
-map \ma :e Makefile<CR>
+noremap \ma :e Makefile<CR>
 
 " ,sa runs current file as script
-map ,sa :so %<CR>
+noremap ,sa :so %<CR>
 
 " ,tl toggles taglist
-map ,tl :Tlist<CR>
+noremap ,tl :Tlist<CR>
 
 " NERDCommenter prefs
 let NERDCompactSexyComs=1
@@ -149,10 +149,11 @@ let NERDSpaceDelims=1
 let NERD_c_alt_style=1
 " let NERD_cpp_alt_style=1
 " let NERD_java_alt_style=1
-map ,cc \cc
-map ,ci \ci
-map ,cs \cs
-map ,cu \cu
+noremap ,cc \cc
+noremap ,ci \ci
+noremap ,cs \cs
+noremap ,cu \cu
+noremap ,cm \cm
 
 " automatically write file when switching buffers
 set autowrite
@@ -213,7 +214,7 @@ function! <SID>StripTrailingWhitespace()
     let @/=_s
     call cursor(l, c)
 endfunction
-nmap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
+nnoremap <silent> <Leader><space> :call <SID>StripTrailingWhitespace()<CR>
 
 " map tab and shift-tab to go to next and previous function, respectively
 nnoremap <silent> <Tab> ]]
