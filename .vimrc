@@ -1,13 +1,13 @@
-so ~/.vim/vundle_setup.vim
+source ~/.vim/vundle_setup.vim
 
 " tabs and such
-set nu " number lines
-set ai " autoindent
-set sts=4 " soft tabstop
-set cin " c-indenting
-set sw=4 " ai indent width
-set ts=4 " normal tabstop
-set et " convert tabs to spaces
+set number " number lines
+set autoindent " autoindent
+set softtabstop=4 " soft tabstop
+set cindent " c-indenting
+set shiftwidth=4 " ai indent width
+set tabstop=4 " normal tabstop
+set expandtab " convert tabs to spaces
 
 if has("gui_running")
     " window size
@@ -40,20 +40,20 @@ inoremap ,} }
 inoremap ,] ]
 
 " remap arrow keys to buffer stuff - arrows will switch between windows, shift+arrow keys switch between buffers/tabs
-noremap <up> :wincmd k<CR>
-noremap <down> :wincmd j<CR>
-noremap \j :wincmd j<CR>
-noremap <right> :wincmd l<CR>
-noremap <left> :wincmd h<CR>
-noremap <S-right> :bnext<CR>
-noremap <S-left> :bprevious<CR>
-noremap <S-down> :tabprevious<CR>
-noremap <S-up> :tabnext<CR>
+noremap <silent> <up> :wincmd k<CR>
+noremap <silent> <down> :wincmd j<CR>
+noremap <silent> \j :wincmd j<CR>
+noremap <silent> <right> :wincmd l<CR>
+noremap <silent> <left> :wincmd h<CR>
+noremap <silent> <S-right> :bnext<CR>
+noremap <silent> <S-left> :bprevious<CR>
+noremap <silent> <S-down> :tabprevious<CR>
+noremap <silent> <S-up> :tabnext<CR>
 " Alt (option) + arrow keys = toggle minibufexplorer and nerdtree
-noremap <M-up> :CMiniBufExplorer<CR>
-noremap <M-down> :MiniBufExplorer<CR>
-noremap <M-left> :NERDTreeClose<CR>
-noremap <M-right> :NERDTree<CR>
+noremap <silent> <M-up> :CMiniBufExplorer<CR>
+noremap <silent> <M-down> :MiniBufExplorer<CR>
+noremap <silent> <M-left> :NERDTreeClose<CR>
+noremap <silent> <M-right> :NERDTree<CR>
 
 " Backups
 set backup " keep a backup file
@@ -94,26 +94,26 @@ syntax on " syntax highlighing
 set cursorline " turn on the cursor line
 
 " Search
-set hls         " highlight search result
-set ic          " case insensitive
+set hlsearch    " highlight search result
+set ignorecase  " case insensitive
 set smartcase   " smart case sensitivity in search
 set incsearch   " incremental searching
 set infercase   " more clever case search stuff
 
 set backspace=indent,eol,start " not really sure
 " map shortcut to open vimrc
-noremap ,v :e ~/.vimrc<cr>
+noremap <silent> ,v :e $MYVIMRC<cr>
 
 " Status line
 set ls=2
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [POS=%04l,%04v][%p%%]\ [LEN=%L] "\ \ \ \ \ \ \ \ %{VimBuddy()}
 
-" vim-latex stuff
+" vim-latex/grep stuff
 set grepprg=grep\ =nH\ $* " show file and line number apparently
 let g:tex_flavor='latex'
 
 " bind noh to C-h
-noremap <C-h> :noh<CR>
+noremap <silent> <C-h> :nohlsearch<CR>
 
 " set up spellcheck
 set spl=en_ca
@@ -130,21 +130,23 @@ set switchbuf=useopen
 command! W w
 command! Q q
 command! WQ wq
+command! Wq wq
 command! WQA wqa
+command! WQa wqa
 command! QA qa
 command! Qa qa
 
 " :reconf reloads vimrc because i do that sometimes
-command! Reconf :so ~/.vimrc
+command! Reconf :source $MYVIMRC
 
 " \ma opens makefile in current directory
-noremap \ma :e Makefile<CR>
+noremap <silent> \ma :e Makefile<CR>
 
 " ,sa runs current file as script
-noremap ,sa :so %<CR>
+noremap <silent> ,sa :source %<CR>
 
 " ,tl toggles taglist
-noremap ,tl :Tlist<CR>
+noremap <silent> ,tl :Tlist<CR>
 
 " NERDCommenter prefs
 let NERDCompactSexyComs=1
@@ -226,9 +228,9 @@ set virtualedit+=block " allow selecing after line end in visual block mode
 nnoremap <silent> <leader>g :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
 
 " easier quickfix navigation
-nnoremap Q :copen<CR>
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprevious<CR>
+nnoremap <silent> Q :copen<CR>
+nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [q :cprevious<CR>
 
 " ascii underlines
 nnoremap ,u yypVr-
