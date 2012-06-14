@@ -186,8 +186,8 @@ command! Delback !rm *~
 
 " disable auto eol for last line
 function! NOEOL()
-	set noeol
-	set binary
+	setlocal noeol
+	setlocal binary
 endfunction
 command! NoEOL call NOEOL()
 
@@ -201,9 +201,12 @@ endif
 set tags=~/.vimtags,~/vimtags,./tags,./.tags,./.undobak/tags,./.undobak/.tags,./.undobak/easytags
 
 " highlight end of line whitespace and use <leader><space> to delete it all
-autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
-autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
-highlight EOLWS ctermbg=red guibg=red
+augroup EOLWS
+    autocmd!
+    autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
+    autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
+    highlight EOLWS ctermbg=red guibg=red
+augroup end
 
 function! <SID>StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
@@ -237,7 +240,15 @@ nnoremap ,u yypVr-
 nnoremap ,U yypVr=
 
 " highlight lines longer than 80 characters
+let g:over_length_highlighting = 0
 function! HighlightLongLines()
+    if g:over_length_highlighting
+        let g:over_length_highlighting = 0
+        highlight clear OverLength
+        return
+    endif
+
+    let g:over_length_highlighting = 1
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
     match OverLength /\%81v.\+/
 endfunction
