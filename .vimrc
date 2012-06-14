@@ -114,7 +114,7 @@ noremap <C-h> :noh<CR>
 
 " set up spellcheck
 set spl=en_ca
-noremap \ss :set spell!<CR>
+noremap <silent> \ss :setlocal spell!<CR>
 
 " exhuberant ctags
 command! Ctags Gentags
@@ -178,9 +178,6 @@ set directory=./.undobak,.
 
 " delete backup files in current directory
 command! Delback !rm *~
-
-" treat txt files as txt files
-au BufRead,BufNewFile *.txt set filetype=txt
 
 " disable auto eol for last line
 function! NOEOL()
@@ -246,8 +243,3 @@ nnoremap ,nll /\%81v.\+/<CR>
 
 " jk escape
 inoremap jk <Esc>
-
-" treat lolcode files as lolcode files
-au BufRead,BufNewFile *.lol set filetype=lolcode
-au BufRead,BufNewFile *.lolcode set filetype=lolcode
-au BufRead,BufNewFile *.lols set filetype=lolcode

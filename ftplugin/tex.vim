@@ -1,2 +1,2 @@
-set iskeyword+=:
-set spell
+setlocal iskeyword+=:
+setlocal spell

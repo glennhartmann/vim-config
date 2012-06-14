@@ -1,3 +1,3 @@
-augroup filetypedetect
-    au BufRead,BufNewFile *.red setf redcode
-augroup END 
+augroup filetype
+    au! BufRead,BufNewFile *.red setfiletype redcode
+augroup end
