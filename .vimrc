@@ -21,20 +21,23 @@ call pathogen#runtime_append_all_bundles()
 
 " autoindent thing (meant to be used with autoclose v1.2 with line 88 commented out)
 inoremap {<CR> {<CR>}<Esc>O
-nnoremap \) i(<Esc>hx
-nnoremap \( i(<Esc>x
-noremap \_ xi(<Esc>[p
-nnoremap \] i[<Esc>hx
-nnoremap \[ i[<Esc>x
-noremap \- xi[<Esc>[p
-nnoremap \} i{<Esc>hx
-nnoremap \{ i{<Esc>x
-noremap \0 xi{<Esc>[p
-noremap \" xi"<Esc>[p
-"noremap \' xi'<Esc>[p
-inoremap ,) (<Esc>hxa
-inoremap ,} {<Esc>hxa
-inoremap ,] [<Esc>hxa
+nnoremap \) i)<Esc>
+nnoremap \( i(<Esc>
+noremap \_ xi()<Esc>[p
+nnoremap \] i]<Esc>
+nnoremap \[ i[<Esc>
+noremap \- xi[]<Esc>[p
+nnoremap \} i}<Esc>
+nnoremap \{ i{<Esc>
+noremap \0 xi{}<Esc>[p
+noremap \" xi""<Esc>[p
+noremap \' xi''<Esc>[p
+inoremap ,( (
+inoremap ,{ {
+inoremap ,[ [
+inoremap ,) )
+inoremap ,} }
+inoremap ,] ]
 
 " remap arrow keys to buffer stuff - arrows will switch between windows, shift+arrow keys switch between buffers/tabs
 noremap <up> :wincmd k<CR>
@@ -149,11 +152,11 @@ let NERDSpaceDelims=1
 let NERD_c_alt_style=1
 " let NERD_cpp_alt_style=1
 " let NERD_java_alt_style=1
-noremap ,cc \cc
-noremap ,ci \ci
-noremap ,cs \cs
-noremap ,cu \cu
-noremap ,cm \cm
+map ,cc \cc
+map ,ci \ci
+map ,cs \cs
+map ,cu \cu
+map ,cm \cm
 
 " automatically write file when switching buffers
 set autowrite
