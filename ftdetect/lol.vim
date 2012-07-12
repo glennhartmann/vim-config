@@ -1,5 +1,3 @@
 augroup filetype
-    au! BufRead,BufNewFile *.lol setfiletype lolcode
-    au! BufRead,BufNewFile *.lolcode setfiletype lolcode
-    au! BufRead,BufNewFile *.lols setfiletype lolcode
+    au! BufRead,BufNewFile *.lol,*.lolcode,*.lols set filetype=lolcode
 augroup end

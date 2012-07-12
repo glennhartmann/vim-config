@@ -1,3 +1,3 @@
 augroup filetype
-    au! BufRead,BufNewFile *.red setfiletype redcode
+    au! BufRead,BufNewFile *.red set filetype=redcode
 augroup end
