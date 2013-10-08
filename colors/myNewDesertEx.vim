@@ -11,7 +11,7 @@ if version > 580
 	syntax reset
     endif
 endif
-let g:colors_name="mydesertEx"
+let g:colors_name="myNewDesertEx"
 
 hi Normal	guifg=gray guibg=grey17 gui=none
 
@@ -63,12 +63,14 @@ hi Ignore       guifg=grey40         gui=none
 hi Todo         guifg=orangered      guibg=yellow2 gui=none
 
 " color terminal definitions
+hi Todo         cterm=none           ctermfg=red      ctermbg=184
+hi CursorLine   cterm=none           ctermbg=235
 hi SpecialKey   ctermfg=darkgreen
 hi NonText      cterm=bold           ctermfg=darkblue
 hi Directory    ctermfg=darkcyan
 hi ErrorMsg     cterm=bold           ctermfg=7        ctermbg=1
-hi IncSearch    cterm=NONE           ctermfg=yellow   ctermbg=green
-hi Search       cterm=NONE           ctermfg=grey     ctermbg=blue
+hi IncSearch    cterm=NONE           ctermfg=darkgrey ctermbg=green
+hi Search       cterm=NONE           ctermfg=grey     ctermbg=darkblue
 hi MoreMsg      ctermfg=darkgreen
 hi ModeMsg      cterm=NONE           ctermfg=brown
 hi LineNr       ctermfg=3
