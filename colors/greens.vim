@@ -37,7 +37,11 @@ hi DiffChange                                      guibg=DarkMagenta  ctermbg=Da
 if v:version >= 700
 
 hi CursorLine                                      guibg=#403820
+hi CursorLine  cterm=none                          ctermbg=239
 hi CursorColumn                                    guibg=#403820
+
+hi IncSearch  cterm=none          ctermfg=darkgrey ctermbg=green
+hi Search     cterm=none          ctermfg=grey     ctermbg=darkblue
 
 hi MatchParen  ctermfg=White      guifg=White      guibg=DarkGreen    ctermbg=DarkGreen
 
